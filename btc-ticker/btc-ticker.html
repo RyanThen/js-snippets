@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BTC Ticker</title>
+  
+  <style>
+    #btc-ticker { color: white; font-size: 20px; margin-top: 20px; }
+    #btc-ticker p { margin: 10px 0; }
+    #btc-ticker span { font-size: 22px; color: #cbb899; }
+  </style>
+</head>
+<body>
+
+  <div id="btc-ticker"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script>
+
+    const btcTickerContainer = document.querySelector('#btc-ticker');
+    
+    function numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    
+    axios.get('https://api.coinpaprika.com/v1/tickers/btc-bitcoin', {
+      headers: { "Content-Type" : "application/json" }
+    })
+    .then(function (response) {
+      btcTickerContainer.insertAdjacentHTML('beforeend', `<p>Current Price of ₿TC: <span>$${numberWithCommas(response.data.quotes.USD.price.toFixed(2))}</span></p>
+      <p>24hr Volume: <span>$${numberWithCommas(response.data.quotes.USD.volume_24h.toFixed(2))}</span></p>
+      <p>Market Cap: <span>$${numberWithCommas(response.data.quotes.USD.market_cap.toFixed(2))}</span></p>`)
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+
+  </script>
+</body>
+</html>
